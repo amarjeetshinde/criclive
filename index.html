@@ -61,25 +61,11 @@
         }
 
         .video-container {
-            background: linear-gradient(135deg, #c41e8c 0%, #8b1464 100%);
+            background: #000;
             border-radius: 12px;
             padding: 0;
             position: relative;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .video-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><circle cx="200" cy="300" r="150" fill="rgba(0,0,0,0.1)"/><circle cx="1000" cy="400" r="200" fill="rgba(0,0,0,0.1)"/></svg>');
-            opacity: 0.3;
         }
 
         .stream-iframe {
@@ -94,21 +80,6 @@
             height: 100%;
             border: none;
             display: block;
-        }
-
-        .message-banner {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 16px 32px;
-            border-radius: 8px;
-            font-size: 20px;
-            font-weight: 600;
-            text-align: center;
-            z-index: 2;
         }
 
         /* Action Buttons */
@@ -308,13 +279,6 @@
                 padding: 10px;
             }
 
-            .message-banner {
-                font-size: 14px;
-                padding: 12px 20px;
-                bottom: 20px;
-                max-width: 90%;
-            }
-
             .action-buttons {
                 flex-direction: column;
             }
@@ -376,12 +340,10 @@
                 <iframe 
                     src="https://cricketstan.github.io/Willow-Sports/"
                     allowfullscreen
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    scrolling="no">
+                    allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                    scrolling="no"
+                    autoplay>
                 </iframe>
-            </div>
-            <div class="message-banner">
-                We are unable to show this sports event
             </div>
         </div>
 
@@ -401,7 +363,18 @@
         // Show popup on page load
         window.addEventListener('load', function() {
             document.getElementById('popup').classList.remove('hidden');
+            
+            // Also trigger iframe reload for autoplay
+            const iframe = document.querySelector('.stream-iframe iframe');
+            if (iframe) {
+                iframe.src = iframe.src;
+            }
         });
+
+        // Optional: Show popup after delay (commented out for now)
+        // setTimeout(function() {
+        //     document.getElementById('popup').classList.remove('hidden');
+        // }, 5000);
 
         function joinTelegram() {
             window.open('https://t.me/+PJjsaxYahFM0NzM1', '_blank');
