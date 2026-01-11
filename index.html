@@ -126,6 +126,8 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
+        /* Fullscreen button removed */
+
         .btn-icon {
             font-size: 20px;
         }
@@ -348,7 +350,7 @@
         </div>
 
         <div class="action-buttons">
-            <button class="action-btn telegram-btn" onclick="joinTelegram()">
+                <button class="action-btn telegram-btn" onclick="joinTelegram()">
                 <span class="btn-icon">✈</span>
                 <span>Join Telegram Channel</span>
             </button>
@@ -363,12 +365,6 @@
         // Show popup on page load
         window.addEventListener('load', function() {
             document.getElementById('popup').classList.remove('hidden');
-            
-            // Also trigger iframe reload for autoplay
-            const iframe = document.querySelector('.stream-iframe iframe');
-            if (iframe) {
-                iframe.src = iframe.src;
-            }
         });
 
         // Optional: Show popup after delay (commented out for now)
@@ -383,6 +379,8 @@
 
         function closePopup() {
             document.getElementById('popup').classList.add('hidden');
+            // Attempt to start the embedded stream (best-effort).
+            startStreamAutoplay();
         }
 
         // Close popup when clicking outside
@@ -407,6 +405,22 @@
                 fallbackCopy(currentUrl);
             }
         }
+
+        // Best-effort: reload iframe with autoplay/muted params so browsers allow autoplay
+        function startStreamAutoplay() {
+            const iframe = document.querySelector('.stream-iframe iframe');
+            if (!iframe) return;
+            let src = iframe.getAttribute('src') || '';
+            // remove existing autoplay/muted params if any
+            src = src.replace(/[?&]autoplay=[^&]*/g, '').replace(/[?&]muted=[^&]*/g, '');
+            const sep = src.includes('?') ? '&' : '?';
+            // add a timestamp to force reload
+            const newSrc = src + sep + 'autoplay=1&muted=1&ts=' + Date.now();
+            iframe.src = newSrc;
+        }
+
+        // Toggle fullscreen for the video container
+        // Fullscreen control removed (button was removed)
 
         // Fallback copy method for older browsers
         function fallbackCopy(text) {
